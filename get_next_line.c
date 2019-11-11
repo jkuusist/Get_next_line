@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/11 10:47:17 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/11 11:25:31 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		get_next_line(const int fd, char **line)
 		buffer[ret] = '\0';
 		if (store[fd] == NULL)
 		{
-			store[fd] = ft_strdup(buffer);
+			store[fd] = ft_strdup(buffer);	
 		}
 		else
 		{
@@ -43,15 +43,15 @@ int		get_next_line(const int fd, char **line)
 		if (ft_strchr(store[fd], '\n'))
 			break ;
 	}	
-	while ((*(store[fd]) != '\0') && (*(store[fd]) != '\0'))
-		(store[fd])++;
+	while ((store[fd][i] != '\n') && ((store[fd][i] != '\0')))
+		i++;
 	if (*(store[fd]) == '\n')
 	{
-		*line = ft_strsub((*store), 0, i);
-		temp = ft_strdup(&((*store)[i + 1]));
-		free (*store);
-		*store = temp;
-		if ((*store)[0] == '\0')
+		*line = ft_strsub((store[fd]), 0, i);
+		temp = ft_strdup(&((store[fd])[i + 1]));
+		free (store[fd]);
+		store[fd] = temp;
+		if (store[fd][0] == '\0')
 			ft_strdel(store);
 	}
 	else
