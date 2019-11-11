@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:34:13 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/08 15:09:49 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/11 12:07:39 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # define BUFF_SIZE 32
-# define STORE_SIZE 4096
+# define STORE_SIZE 4864
 
 int		get_next_line(const int fd, char **line);
 char	*ft_strdup(const char *s1);
