@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/13 12:06:50 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/13 12:09:25 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-static void		write_line(char **store, char *buffer, char *temp, int fd)
+static void		write_line_store(char **store, char *buffer, char *temp, int fd)
 {
 	if (store[fd] == NULL)
 		store[fd] = ft_strdup(buffer);
@@ -42,7 +42,7 @@ int				get_next_line(const int fd, char **line)
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		write_line(store, buffer, temp, fd);
+		write_line_store(store, buffer, temp, fd);
 	}
 	while ((store[fd][i] != '\n') && ((store[fd][i] != '\0')))
 		i++;
