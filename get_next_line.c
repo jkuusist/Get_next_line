@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/13 12:09:25 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/13 12:48:19 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int				get_next_line(const int fd, char **line)
 	if ((fd == -1) || (!line))
 		return (-1);
 	i = 0;
+	temp = 0;
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
