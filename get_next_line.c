@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/13 12:48:19 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/13 14:48:28 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-static void		write_line_store(char **store, char *buffer, char *temp, int fd)
+static void		write_store(char **store, char *buffer, char *temp, int fd)
 {
 	if (store[fd] == NULL)
 		store[fd] = ft_strdup(buffer);
@@ -28,23 +28,11 @@ static void		write_line_store(char **store, char *buffer, char *temp, int fd)
 		return ;
 }
 
-int				get_next_line(const int fd, char **line)
+static int		write_line(char **store, char **line, char *temp, int fd)
 {
-	static char	*store[STORE_SIZE];
-	char		buffer[BUFF_SIZE + 1];
-	char		*temp;
-	int			ret;
-	int			i;
+	int i;
 
-	if ((fd == -1) || (!line))
-		return (-1);
 	i = 0;
-	temp = 0;
-	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
-	{
-		buffer[ret] = '\0';
-		write_line_store(store, buffer, temp, fd);
-	}
 	while ((store[fd][i] != '\n') && ((store[fd][i] != '\0')))
 		i++;
 	if (store[fd][i] == '\n')
@@ -64,4 +52,24 @@ int				get_next_line(const int fd, char **line)
 		ft_strdel(store);
 	}
 	return (1);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static char	*store[STORE_SIZE];
+	char		buffer[BUFF_SIZE + 1];
+	char		*temp;
+	int			ret;
+	int			result;
+
+	if ((fd == -1) || (!line))
+		return (-1);
+	temp = 0;
+	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	{
+		buffer[ret] = '\0';
+		write_store(store, buffer, temp, fd);
+	}
+	result = write_line(store, line, temp, fd);
+	return (result);
 }
