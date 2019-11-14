@@ -6,27 +6,13 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/13 14:48:28 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/14 13:49:24 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-
-static void		write_store(char **store, char *buffer, char *temp, int fd)
-{
-	if (store[fd] == NULL)
-		store[fd] = ft_strdup(buffer);
-	else
-	{
-		temp = ft_strjoin(store[fd], buffer);
-		free(store[fd]);
-		store[fd] = temp;
-	}
-	if (ft_strchr(buffer, '\n'))
-		return ;
-}
 
 static int		write_line(char **store, char **line, char *temp, int fd)
 {
@@ -56,7 +42,7 @@ static int		write_line(char **store, char **line, char *temp, int fd)
 
 int				get_next_line(const int fd, char **line)
 {
-	static char	*store[STORE_SIZE];
+	static char	*store[FD_MAX];
 	char		buffer[BUFF_SIZE + 1];
 	char		*temp;
 	int			ret;
@@ -68,7 +54,16 @@ int				get_next_line(const int fd, char **line)
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		write_store(store, buffer, temp, fd);
+		if (store[fd] == NULL)
+			store[fd] = ft_strdup(buffer);
+		else
+		{
+			temp = ft_strjoin(store[fd], buffer);
+			free(store[fd]);
+			store[fd] = temp;
+		}
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
 	result = write_line(store, line, temp, fd);
 	return (result);
