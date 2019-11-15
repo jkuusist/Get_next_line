@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/14 13:49:24 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/15 14:10:28 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,17 @@ static int		write_line(char **store, char **line, char *temp, int fd)
 	else
 	{
 		*line = ft_strdup(store[fd]);
-		ft_strdel(store);
+		ft_strdel(&store[fd]);
 	}
 	return (1);
+}
+
+static int		get_return_value(char **store, int ret, int fd)
+{
+	if ((ret == 0) && (store[fd] == NULL))
+		return (0);
+	else
+		return (1);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -50,7 +58,6 @@ int				get_next_line(const int fd, char **line)
 
 	if ((fd == -1) || (!line))
 		return (-1);
-	temp = 0;
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
@@ -65,6 +72,7 @@ int				get_next_line(const int fd, char **line)
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	result = write_line(store, line, temp, fd);
+	if ((result = get_return_value(store, ret, fd)) != 0)
+		result = write_line(store, line, temp, fd);
 	return (result);
 }
