@@ -6,7 +6,7 @@
 /*   By: jkuusist <jkuusist@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:33:55 by jkuusist          #+#    #+#             */
-/*   Updated: 2019/11/15 14:10:28 by jkuusist         ###   ########.fr       */
+/*   Updated: 2019/11/18 15:02:38 by jkuusist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-static int		write_line(char **store, char **line, char *temp, int fd)
+static int		write_line(char **store, char **line, int fd)
 {
-	int i;
+	int		i;
+	char	*temp;
 
 	i = 0;
-	while ((store[fd][i] != '\n') && ((store[fd][i] != '\0')))
+	while ((store[fd][i] != '\n') && (store[fd][i] != '\0'))
 		i++;
 	if (store[fd][i] == '\n')
 	{
@@ -40,9 +41,20 @@ static int		write_line(char **store, char **line, char *temp, int fd)
 	return (1);
 }
 
+static void		handle_buffer(char **store, char *buffer, int fd)
+{
+	char *temp;
+
+	temp = ft_strjoin(store[fd], buffer);
+	free(store[fd]);
+	store[fd] = temp;
+}
+
 static int		get_return_value(char **store, int ret, int fd)
 {
-	if ((ret == 0) && (store[fd] == NULL))
+	if (ret < 0)
+		return (-1);
+	else if ((ret == 0) && (store[fd] == NULL))
 		return (0);
 	else
 		return (1);
@@ -52,7 +64,6 @@ int				get_next_line(const int fd, char **line)
 {
 	static char	*store[FD_MAX];
 	char		buffer[BUFF_SIZE + 1];
-	char		*temp;
 	int			ret;
 	int			result;
 
@@ -64,15 +75,13 @@ int				get_next_line(const int fd, char **line)
 		if (store[fd] == NULL)
 			store[fd] = ft_strdup(buffer);
 		else
-		{
-			temp = ft_strjoin(store[fd], buffer);
-			free(store[fd]);
-			store[fd] = temp;
-		}
+			handle_buffer(store, buffer, fd);
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
+	if (ret < 0)
+		return (-1);
 	if ((result = get_return_value(store, ret, fd)) != 0)
-		result = write_line(store, line, temp, fd);
+		result = write_line(store, line, fd);
 	return (result);
 }
